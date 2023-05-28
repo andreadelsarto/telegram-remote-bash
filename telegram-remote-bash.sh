@@ -183,7 +183,7 @@ while true; do
                     curl -s -F chat_id=$CHAT_ID -F document=@<(echo -e "$PLAIN_TEXT") https://api.telegram.org/bot$TOKEN/sendDocument
                     ;;
                 "/ip")
-                    IP="$(ip addr show | grep -E "inet " | head -n 1 | awk '{print $2}')"
+                    IP="$(hostname -I)"
                     curl -s -X POST https://api.telegram.org/bot$TOKEN/sendMessage -d chat_id=$CHAT_ID -d text="L'indirizzo IP del PC è $IP"
                     ;;
                 "/network")
@@ -233,7 +233,9 @@ while true; do
 
 
                 *)
-                    ;;
+                    # Gestione comandi sconosciuti
+                    curl -s -X POST https://api.telegram.org/bot$TOKEN/sendMessage -d chat_id=$CHAT_ID -d text="Comando non riconosciuto!"
+                ;;
             esac
 
             # Aggiorna l'ID e il timestamp dell'ultimo messaggio inviato dal bot
